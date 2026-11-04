@@ -23,14 +23,18 @@ hiddenimports = [
     'obsidian_stem_splitter_pro',
 ]
 
-# Explicitly bundle self-contained FFmpeg and FFprobe binaries
-static_ffmpeg_dir = r"C:\Users\PaulMagennisTCNS\AppData\Local\Programs\Python\Python312\Lib\site-packages\static_ffmpeg\bin\win32"
-ff_exe = os.path.join(static_ffmpeg_dir, "ffmpeg.exe")
-fp_exe = os.path.join(static_ffmpeg_dir, "ffprobe.exe")
-if os.path.exists(ff_exe):
-    binaries.append((ff_exe, "."))
-if os.path.exists(fp_exe):
-    binaries.append((fp_exe, "."))
+# Explicitly bundle self-contained FFmpeg and FFprobe binaries dynamically
+import importlib.util
+static_ffmpeg_spec = importlib.util.find_spec("static_ffmpeg")
+if static_ffmpeg_spec and static_ffmpeg_spec.origin:
+    pkg_dir = os.path.dirname(static_ffmpeg_spec.origin)
+    for sub in [os.path.join(pkg_dir, "bin", "win32"), os.path.join(pkg_dir, "bin")]:
+        ff_candidate = os.path.join(sub, "ffmpeg.exe")
+        fp_candidate = os.path.join(sub, "ffprobe.exe")
+        if os.path.exists(ff_candidate) and (ff_candidate, ".") not in binaries:
+            binaries.append((ff_candidate, "."))
+        if os.path.exists(fp_candidate) and (fp_candidate, ".") not in binaries:
+            binaries.append((fp_candidate, "."))
 
 # Collect third party packages & assets
 for pkg in ['customtkinter', 'tkinterdnd2', 'static_ffmpeg', 'yt_dlp', 'pygame', 'soundfile', 'demucs', 'librosa']:

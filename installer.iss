@@ -5,7 +5,8 @@
 #define MyAppVersion "2.0.0"
 #define MyAppPublisher "Obsidian Project"
 #define MyAppExeName "ObsidianStemSplitterPro.exe"
-#define SourceAppDir "C:\TCNS\Gemini projects\StemSplitterPro\dist\ObsidianStemSplitterPro"
+#define SourceAppDir "dist\ObsidianStemSplitterPro"
+#define UserProfile GetEnv('USERPROFILE')
 
 [Setup]
 AppId={{D8A6891B-54F2-4F8A-98C1-F09D73A6B431}
@@ -16,11 +17,11 @@ AppPublisher={#MyAppPublisher}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputDir=C:\TCNS\Gemini projects\Obsidian Stem Splitter Full Installer
+OutputDir=..\Obsidian Stem Splitter Full Installer
 OutputBaseFilename=Obsidian_Stem_Splitter_Pro_Setup
-SetupIconFile=C:\TCNS\Gemini projects\StemSplitterPro\assets\app_icon.ico
-WizardImageFile=C:\TCNS\Gemini projects\StemSplitterPro\assets\installer_sidebar.bmp
-WizardSmallImageFile=C:\TCNS\Gemini projects\StemSplitterPro\assets\installer_small.bmp
+SetupIconFile=assets\app_icon.ico
+WizardImageFile=assets\installer_sidebar.bmp
+WizardSmallImageFile=assets\installer_small.bmp
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -42,7 +43,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#SourceAppDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\PaulMagennisTCNS\.cache\huggingface\hub\models--adefossez--HTDemucs-6s\*"; DestDir: "{%USERPROFILE}\.cache\huggingface\hub\models--adefossez--HTDemucs-6s"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#UserProfile}\.cache\huggingface\hub\models--adefossez--HTDemucs-6s\*"; DestDir: "{%USERPROFILE}\.cache\huggingface\hub\models--adefossez--HTDemucs-6s"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\assets\app_icon.ico"

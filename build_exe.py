@@ -44,14 +44,26 @@ def build():
         exe_path = dist_dir / "ObsidianStemSplitterPro.exe"
         
         # Ensure ffmpeg and ffprobe are present in dist directory
-        static_bin_dir = Path(sys.executable).parent / "Lib" / "site-packages" / "static_ffmpeg" / "bin" / "win32"
-        for bin_name in ["ffmpeg.exe", "ffprobe.exe"]:
-            target = dist_dir / bin_name
-            if not target.exists():
-                src = static_bin_dir / bin_name
-                if src.exists():
-                    shutil.copy2(src, target)
-                    print(f"Copied {bin_name} to {dist_dir}")
+        import importlib.util
+        static_bin_dir = None
+        ffmpeg_spec = importlib.util.find_spec("static_ffmpeg")
+        if ffmpeg_spec and ffmpeg_spec.origin:
+            cand = Path(ffmpeg_spec.origin).parent / "bin" / "win32"
+            if cand.exists():
+                static_bin_dir = cand
+            else:
+                cand2 = Path(ffmpeg_spec.origin).parent / "bin"
+                if cand2.exists():
+                    static_bin_dir = cand2
+
+        if static_bin_dir:
+            for bin_name in ["ffmpeg.exe", "ffprobe.exe"]:
+                target = dist_dir / bin_name
+                if not target.exists():
+                    src = static_bin_dir / bin_name
+                    if src.exists():
+                        shutil.copy2(src, target)
+                        print(f"Copied {bin_name} to {dist_dir}")
 
         # Ensure assets are copied to dist directory
         assets_src = proj_dir / "assets"
