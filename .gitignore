@@ -1,0 +1,87 @@
+# ==============================================================================
+# Obsidian Stem Splitter Pro - Git Ignore Configuration
+# ==============================================================================
+
+# --- Python Bytecode & Virtual Environments ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# --- Large Binaries & Build Outputs ---
+# Exclude standalone executables, compiled DLLs, and installer packages from git history
+# (Distribute these via GitHub Releases instead)
+*.exe
+*.dll
+*.pyd
+*.lib
+*.exp
+*.pdb
+*.manifest
+
+# Allow assets even if they have extensions
+!assets/
+!assets/**
+
+# --- PyInstaller & Inno Setup Output Directories ---
+/build/
+/dist/
+Obsidian Stem Splitter Full Installer/
+Output/
+*.iss.bak
+
+# --- Model Checkpoints & AI Weights ---
+# Weights are automatically retrieved or bundled via Inno Setup
+*.pt
+*.pth
+*.safetensors
+*.bin
+*.onnx
+
+# --- Audio Files & Output Stems ---
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.aac
+*.m4a
+*.wma
+*.opus
+*.aiff
+
+# --- Logs, Crash Reports & System Files ---
+*.log
+crash_reports/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store

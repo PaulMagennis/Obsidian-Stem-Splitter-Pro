@@ -1,0 +1,15 @@
+# Obsidian Stem Splitter Pro - Core Dependencies
+torch>=2.2.0
+torchaudio>=2.2.0
+demucs>=4.1.0
+customtkinter>=5.2.0
+tkinterdnd2>=0.3.0
+pygame>=2.6.0
+soundfile>=0.12.0
+librosa>=0.10.0
+yt-dlp>=2024.0.0
+static-ffmpeg>=2.5
+numpy>=1.26.0
+Pillow>=10.0.0
+scipy>=1.12.0
+pyinstaller>=6.0.0
