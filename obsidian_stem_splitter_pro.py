@@ -168,6 +168,9 @@ class ObsidianStemSplitterApp(*_BASE_CLASSES):
         self._vu_was_active = False
         self._daw_frames = []
         self._daw_frame_idx = 0
+        self._expanded_image_name = None
+        self._lightbox_overlay = None
+        self._current_lightbox_ctk = None
 
         # Original Audio Preview Player state (separate from 9-stem mixer player)
         self._orig_channel = None
@@ -267,8 +270,9 @@ class ObsidianStemSplitterApp(*_BASE_CLASSES):
             try:
                 logo_pil = Image.open(logo_path)
                 self.logo_ctk = ctk.CTkImage(light_image=logo_pil, dark_image=logo_pil, size=(92, 92))
-                self.logo_lbl = ctk.CTkLabel(left_box, image=self.logo_ctk, text="")
+                self.logo_lbl = ctk.CTkLabel(left_box, image=self.logo_ctk, text="", cursor="hand2")
                 self.logo_lbl.pack(side="left", padx=(0, 16))
+                self.logo_lbl.bind("<Button-1>", lambda e: self._toggle_image_expand("logo.jpg"))
             except Exception as e:
                 print(f"Notice loading logo: {e}")
 
@@ -317,6 +321,27 @@ class ObsidianStemSplitterApp(*_BASE_CLASSES):
         )
         hw_lbl.pack(padx=12, pady=4)
 
+        # Right Logo (Top Right corner of header - same size 92x92 as top left, clickable to expand)
+        logo_purple_path = get_asset_path("logo_purple.jpg")
+        if logo_purple_path.exists():
+            try:
+                logo_purple_pil = Image.open(logo_purple_path)
+                self.logo_purple_ctk = ctk.CTkImage(
+                    light_image=logo_purple_pil,
+                    dark_image=logo_purple_pil,
+                    size=(92, 92)
+                )
+                self.logo_purple_lbl = ctk.CTkLabel(
+                    inner,
+                    image=self.logo_purple_ctk,
+                    text="",
+                    cursor="hand2"
+                )
+                self.logo_purple_lbl.pack(side="right", padx=(12, 0), anchor="e")
+                self.logo_purple_lbl.bind("<Button-1>", lambda e: self._toggle_image_expand("logo_purple.jpg"))
+            except Exception as e:
+                print(f"Notice loading purple logo: {e}")
+
         # Right Cluster: Looping Animated DAW Audio Track separating into spectrum
         daw_box = ctk.CTkFrame(
             inner,
@@ -351,6 +376,145 @@ class ObsidianStemSplitterApp(*_BASE_CLASSES):
                 text_color=COLORS["neon_green"]
             )
             fallback_lbl.pack(padx=20, pady=20)
+
+    def _toggle_image_expand(self, asset_name: str):
+        """Toggles fullscreen/expanded lightbox modal view of header logos."""
+        if getattr(self, "_expanded_image_name", None) == asset_name:
+            self._shrink_image()
+        else:
+            self._expand_image(asset_name)
+
+    def _expand_image(self, asset_name: str):
+        """Displays the clicked image at full resolution centered over the workspace in a sleek obsidian lightbox."""
+        asset_path = get_asset_path(asset_name)
+        if not asset_path.exists():
+            return
+
+        try:
+            pil_img = Image.open(asset_path)
+        except Exception as e:
+            print(f"Error opening image {asset_name}: {e}")
+            return
+
+        self._expanded_image_name = asset_name
+
+        # Calculate maximum display dimensions based on current window size
+        self.update_idletasks()
+        win_w = max(self.winfo_width(), 1080)
+        win_h = max(self.winfo_height(), 800)
+
+        # Allow margins for container borders, title bar, and hint text
+        avail_w = max(300, win_w - 120)
+        avail_h = max(300, win_h - 160)
+
+        orig_w, orig_h = pil_img.size
+        scale = min(1.0, avail_w / orig_w, avail_h / orig_h)
+        disp_w = max(200, int(orig_w * scale))
+        disp_h = max(200, int(orig_h * scale))
+
+        # Distinct glowing theme per logo
+        if "purple" in asset_name.lower():
+            border_color = "#A855F7"  # Electric neon purple
+            title_text = "🟣 OBSIDIAN STEM SPLITTER PRO"
+            accent_color = "#C084FC"
+        else:
+            border_color = COLORS["neon_green"]
+            title_text = "🟢 OBSIDIAN CREATOR STUDIO"
+            accent_color = COLORS["neon_green"]
+
+        if self._lightbox_overlay is None or not self._lightbox_overlay.winfo_exists():
+            self._lightbox_overlay = ctk.CTkFrame(
+                self,
+                fg_color="#08090C",  # Studio dark backdrop
+                corner_radius=0
+            )
+
+        # Clear any prior children in the lightbox
+        for child in self._lightbox_overlay.winfo_children():
+            try:
+                child.destroy()
+            except Exception:
+                pass
+
+        # Make overlay cover the entire application window
+        self._lightbox_overlay.place(x=0, y=0, relwidth=1, relheight=1)
+        self._lightbox_overlay.lift()
+
+        # Centered card
+        card = ctk.CTkFrame(
+            self._lightbox_overlay,
+            fg_color=COLORS["bg_card"],
+            corner_radius=16,
+            border_width=2,
+            border_color=border_color
+        )
+        card.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Top bar with title and close button
+        top_bar = ctk.CTkFrame(card, fg_color="transparent")
+        top_bar.pack(fill="x", padx=16, pady=(12, 8))
+
+        t_lbl = ctk.CTkLabel(
+            top_bar,
+            text=title_text,
+            font=ctk.CTkFont(size=16, weight="bold"),
+            text_color=accent_color
+        )
+        t_lbl.pack(side="left")
+
+        close_btn = ctk.CTkButton(
+            top_bar,
+            text="✕ Shrink [ESC]",
+            width=110,
+            height=28,
+            fg_color=COLORS["bg_dark"],
+            hover_color=COLORS["border"],
+            text_color=COLORS["text_secondary"],
+            border_width=1,
+            border_color=border_color,
+            command=self._shrink_image
+        )
+        close_btn.pack(side="right")
+
+        # High-res expanded image
+        self._current_lightbox_ctk = ctk.CTkImage(
+            light_image=pil_img,
+            dark_image=pil_img,
+            size=(disp_w, disp_h)
+        )
+        img_lbl = ctk.CTkLabel(
+            card,
+            image=self._current_lightbox_ctk,
+            text="",
+            cursor="hand2"
+        )
+        img_lbl.pack(padx=16, pady=(0, 8))
+
+        # Bottom hint
+        hint_lbl = ctk.CTkLabel(
+            card,
+            text="💡 Click anywhere on the picture or screen to shrink back",
+            font=ctk.CTkFont(size=12),
+            text_color=COLORS["text_secondary"]
+        )
+        hint_lbl.pack(pady=(0, 12))
+
+        # Bind click-to-shrink on all overlay elements
+        def on_click(e):
+            self._shrink_image()
+
+        self._lightbox_overlay.bind("<Button-1>", on_click)
+        card.bind("<Button-1>", on_click)
+        img_lbl.bind("<Button-1>", on_click)
+        hint_lbl.bind("<Button-1>", on_click)
+        t_lbl.bind("<Button-1>", on_click)
+        top_bar.bind("<Button-1>", on_click)
+
+    def _shrink_image(self):
+        """Hides the expanded image lightbox and returns to the normal workspace."""
+        self._expanded_image_name = None
+        if self._lightbox_overlay and self._lightbox_overlay.winfo_exists():
+            self._lightbox_overlay.place_forget()
 
     def _build_drop_zone(self):
         self.drop_card = ctk.CTkFrame(
@@ -2182,6 +2346,11 @@ class ObsidianStemSplitterApp(*_BASE_CLASSES):
 
         keysym = event.keysym.lower() if event.keysym else ""
         char = event.char.lower() if event.char else ""
+
+        # Pressing 'Escape': shrinks expanded image lightbox if open
+        if keysym == "escape" and getattr(self, "_expanded_image_name", None):
+            self._shrink_image()
+            return "break"
 
         # Pressing 'M' / 'm': mutes/unmutes all selected stems
         if keysym == "m" or char == "m":
