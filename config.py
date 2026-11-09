@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 APP_NAME = "Obsidian Stem Splitter Pro"
-APP_VERSION = "1.0.0"
+APP_VERSION = "2.0.0"
 
 # Target stems definition: (stem_id, display_name, icon, default_color)
 STEM_DEFINITIONS = [

@@ -1,18 +1,25 @@
 <div align="center">
 
-  <img src="assets/logo.jpg" alt="Obsidian Stem Splitter Pro Logo" width="220" style="border-radius: 12px; margin-bottom: 12px;" />
+  <img src="assets/logo.jpg" alt="Obsidian Green Logo" width="170" style="border-radius: 12px; margin: 0 10px 12px 10px; border: 2px solid #00FF66;" />
+  <img src="assets/logo_purple.jpg" alt="Obsidian Purple Logo" width="170" style="border-radius: 12px; margin: 0 10px 12px 10px; border: 2px solid #A855F7;" />
 
-  # 🎛️ OBSIDIAN STEM SPLITTER PRO
+  # 🎛️ OBSIDIAN STEM SPLITTER PRO v2.0
   ### Professional AI-Powered Multi-Track Audio Separation Studio & Mixing Desk
 
   [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011%20(64--bit)-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/PaulMagennis/Obsidian-Stem-Splitter-Pro)
   [![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
   [![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
   [![License](https://img.shields.io/badge/License-MIT-00FF66?style=for-the-badge)](LICENSE)
-  [![Status](https://img.shields.io/badge/Release-v2.0.0-9B51E0?style=for-the-badge)](https://github.com/PaulMagennis/Obsidian-Stem-Splitter-Pro/releases)
+  [![Release](https://img.shields.io/badge/Release-v2.0.0-9B51E0?style=for-the-badge&logo=github)](https://github.com/PaulMagennis/Obsidian-Stem-Splitter-Pro/releases/tag/v2.0.0)
 
   <p align="center">
     <b>Separate any audio track into 9 discrete studio instrument stems with zero phase cancellation, real-time in-memory mixing, and 100% offline local privacy.</b>
+  </p>
+
+  <p align="center">
+    <a href="https://github.com/PaulMagennis/Obsidian-Stem-Splitter-Pro/releases/download/v2.0.0/Obsidian_Stem_Splitter_Pro_Setup.exe">
+      <img src="https://img.shields.io/badge/⬇️_Download_Windows_Installer-v2.0.0_(456_MB)-00FF66?style=for-the-badge&labelColor=14161C" alt="Download Windows Installer" />
+    </a>
   </p>
 
   <img src="assets/daw_spectrum.gif" alt="DAW Audio Spectrum Animation" width="680" style="border-radius: 8px; border: 1px solid #FF6600; margin-top: 10px;" />
@@ -61,6 +68,11 @@ Unlike cloud-based stem services that compromise your audio quality with lossy c
 - **Seamless Section Looping (`🔁 Loop`)**: Loop specific sections or entire tracks continuously while fine-tuning channel faders.
 - **Smart Spacebar Routing**: Intelligent DAW transport control—taps play/pause on the original preview track before separation, and on the 9-stem mixer after separation.
 
+### 🎨 Studio Artwork & Full-Screen Lightbox
+- **Purple Alien Brand Identity**: Features new high-resolution alien artwork and matching multi-resolution Windows setup / app icon (`.ico`).
+- **Symmetrical Header Console**: Symmetrically framed with the Green Obsidian alien on the top left and Purple Obsidian alien on the top right.
+- **Interactive Lightbox Zoom**: Click on either logo anytime to expand it to full high-resolution (1024×1024) centered over the DAW with a themed glowing neon border (`#00FF66` green or `#A855F7` electric purple). Click again or press <kbd>Esc</kbd> to shrink back.
+
 ### 🎵 Dedicated Drag & Drop Preview Player
 - Test and audition original tracks directly inside the drag-and-drop zone **before separating anything**.
 - Includes dedicated Play, Pause, Stop, Timeline Scrubber, Volume Slider, Mute, and `100%` Reset.
@@ -86,7 +98,7 @@ Unlike cloud-based stem services that compromise your audio quality with lossy c
 | <kbd>S</kbd> | **Solo / Unsolo** | Solos or unsolos all currently selected stems simultaneously |
 | <kbd>P</kbd> | **Phase Invert (Ø)** | Flips 180° phase polarity on selected stems |
 | <kbd>Ctrl</kbd> + <kbd>A</kbd> | **Select All Stems** | Selects all 9 mixing strips for bulk adjustments |
-| <kbd>Esc</kbd> | **Clear Selection** | Deselects all active stem highlights |
+| <kbd>Esc</kbd> | **Clear / Shrink** | Shrinks expanded image lightbox, or clears active stem selection |
 
 ---
 
